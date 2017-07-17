@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mm.mmapplication.LoginActivity">
+    tools:context="com.example.mm.mmapplication.LoginActivity"
+    android:baselineAligned="false"
+    android:orientation="vertical">
 
     <!-- Login progress -->
     <ProgressBar
@@ -22,7 +23,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="482dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -62,6 +63,18 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <CheckBox
+                android:text="Remember me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rememberMeCB"
+                android:checked="false"
+                android:alpha="0.9"
+                style="@android:style/Widget.Holo.Light.CompoundButton.CheckBox"
+                android:textColor="@color/colorAccent"
+                android:layoutDirection="rtl"
+                android:textAlignment="textEnd" />
 
             <Button
                 android:id="@+id/email_sign_in_button"

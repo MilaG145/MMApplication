@@ -1,10 +1,13 @@
 package com.example.mm.mmapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mm.mmapplication.Model.User;
@@ -23,6 +26,8 @@ public class FirstScreenActivity extends AppCompatActivity {
     TextView textView;
     String mail;
     Intent intent;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,20 @@ public class FirstScreenActivity extends AppCompatActivity {
         intent = getIntent();
         mail = intent.getStringExtra("EXTRA_MESSAGE");
         //textView.setText("Welcome " + mail);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
+        Button logoutBtn= (Button) findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginPrefsEditor.clear();
+                loginPrefsEditor.commit();
+                Intent intent= new Intent(FirstScreenActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
         attemptTask();
     }
 

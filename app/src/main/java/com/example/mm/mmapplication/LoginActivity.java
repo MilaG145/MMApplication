@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -51,6 +53,10 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private Intent intent;
+    private boolean checked;
+    CheckBox checkBox;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -64,6 +70,17 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
+        checkBox= (CheckBox) findViewById(R.id.rememberMeCB);
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        boolean logged=loginPreferences.getBoolean("logged",false);
+        if(logged){
+            Intent i = new Intent(LoginActivity.this,FirstScreenActivity.class);
+            i.putExtra("EXTRA_MESSAGE",loginPreferences.getString("email",""));
+            System.out.println("Prenasocuva!!!!!!!!!");
+            startActivity(i);
+        }
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -278,6 +295,11 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+                if(checkBox.isChecked()){
+                    loginPrefsEditor.putBoolean("logged",true);
+                    loginPrefsEditor.putString("email",mEmail);
+                    loginPrefsEditor.commit();
+                }
 
                 intent.putExtra("EXTRA_MESSAGE", mEmail);
                 startActivity(intent);
