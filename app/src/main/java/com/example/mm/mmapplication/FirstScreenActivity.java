@@ -1,10 +1,18 @@
 package com.example.mm.mmapplication;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
+
+import com.example.mm.mmapplication.Model.User;
+
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by Win8.1 on 16.07.2017.
@@ -13,15 +21,78 @@ import android.widget.TextView;
 public class FirstScreenActivity extends AppCompatActivity {
 
     TextView textView;
+    String mail;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.first_screen_activity );
-        textView= (TextView) findViewById(R.id.UsertextView);
-        Intent intent=getIntent();
-        String mail=intent.getStringExtra("EXTRA_MESSAGE");
-        textView.setText("Welcome "+ mail);
+        setContentView(R.layout.first_screen_activity);
+        textView = (TextView) findViewById(R.id.UsertextView);
+        intent = getIntent();
+        mail = intent.getStringExtra("EXTRA_MESSAGE");
+        //textView.setText("Welcome " + mail);
+        attemptTask();
+    }
 
+    private void attemptTask() {
+        GetUser task = new GetUser(mail);
+        task.execute((Void) null);
+
+    }
+
+    public class GetUser extends AsyncTask<Void, Void, Boolean> {
+        private final String mEmail;
+        User user=null;
+
+        GetUser(String email) {
+            mEmail = email;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            String url = "http://192.168.0.106:8080/users/getUserByEmail";
+            String data = null;
+            String jsonStr = null;
+            JSONObject jsonObj = null;
+
+            try {
+                data = URLEncoder.encode("email", "UTF-8")
+                        + "=" + URLEncoder.encode(mEmail, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            try {
+                jsonStr = sh.makeServiceCall(url, data, "POST");
+
+                jsonObj = new JSONObject(jsonStr);
+                Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonObj);
+                //JSONArray jsonArray= jsonObj.getJSONArray("");
+
+                System.out.println(jsonObj.getInt("id"));
+                user=new User();
+                user.setId(jsonObj.getInt("id"));
+                user.setEmail(jsonObj.getString("email"));
+                user.setFirstName(jsonObj.getString("firstName"));
+                user.setLastName(jsonObj.getString("lastName"));
+
+
+            } catch (Exception e) {
+
+            }
+
+            return jsonStr != null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                intent.putExtra("USER",user);
+                textView.setText("Welcome " + user.firstName+" "+user.lastName);
+
+            }
+
+        }
     }
 }

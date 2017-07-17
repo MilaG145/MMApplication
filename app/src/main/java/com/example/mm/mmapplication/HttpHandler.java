@@ -4,21 +4,14 @@ import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Win8.1 on 16.07.2017.
@@ -30,17 +23,19 @@ public class HttpHandler {
     public HttpHandler() {
     }
 
-    public String makeServiceCall(String reqUrl,String data, String method) {
+    public String makeServiceCall(String reqUrl, String data, String method) {
         String response = null;
+        HttpURLConnection conn = null;
         try {
             URL url = new URL(reqUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method);
-            if(method.equals("POST")){
+            if (method.equals("POST")) {
                 conn.setDoOutput(true);
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write( data );
+                wr.write(data);
                 wr.flush();
+                wr.close();
             }
 
 
@@ -56,11 +51,12 @@ public class HttpHandler {
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
+        conn.disconnect();
         return response;
     }
 
 
-    private  String convertStreamToString(InputStream is) {
+    private String convertStreamToString(InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
@@ -78,7 +74,7 @@ public class HttpHandler {
                 e.printStackTrace();
             }
         }
-
+        reader.close();
         return sb.toString();
     }
 }
