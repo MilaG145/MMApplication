@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:id="@+id/createViewFragment">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/titleET"
+            android:hint="Title" />
+
+        <Spinner
+            android:id="@+id/activity_category_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="Date"
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateBn" />
+
+
+        <Spinner
+            android:id="@+id/activity_time_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end" />
+
+        <Button
+                android:text="Create"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/createBtn" />
+
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/editText" />
+
+    </LinearLayout>
+
+</LinearLayout>

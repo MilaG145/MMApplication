@@ -1,4 +1,4 @@
-package com.example.mm.mmapplication;
+package com.example.mm.mmapplication.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mm.mmapplication.Model.User;
+import com.example.mm.mmapplication.R;
 
 import org.json.JSONObject;
 
@@ -48,6 +49,14 @@ public class FirstScreenActivity extends AppCompatActivity {
                 loginPrefsEditor.commit();
                 Intent intent= new Intent(FirstScreenActivity.this,LoginActivity.class);
                 startActivity(intent);
+            }
+        });
+        Button createBtn= (Button) findViewById(R.id.createActivity);
+        createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(FirstScreenActivity.this, CreateActivityActivity.class);
+                startActivity(i);
             }
         });
 

@@ -1,4 +1,4 @@
-package com.example.mm.mmapplication;
+package com.example.mm.mmapplication.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -13,7 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.mm.mmapplication.Activities.FirstScreenActivity;
+import com.example.mm.mmapplication.Activities.HttpHandler;
+import com.example.mm.mmapplication.Activities.LoginActivity;
 import com.example.mm.mmapplication.Model.User;
+import com.example.mm.mmapplication.R;
 
 import org.json.JSONObject;
 

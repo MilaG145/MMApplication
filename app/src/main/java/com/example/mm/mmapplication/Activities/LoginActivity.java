@@ -1,4 +1,4 @@
-package com.example.mm.mmapplication;
+package com.example.mm.mmapplication.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.mm.mmapplication.R;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -306,6 +307,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
 
             } else {
+
                 mEmailView.setError(getString(R.string.error_invalid_email));
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

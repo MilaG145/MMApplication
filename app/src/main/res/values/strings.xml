@@ -18,4 +18,21 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string-array name="activity_choice">
+        <item>SCHOOL</item>
+        <item>WORK</item>
+        <item>SPORT</item>
+        <item>OTHER</item>
+    </string-array>
+
+    <string-array name="activity_time">
+        <item>Only once</item>
+        <item>Every day</item>
+        <item>Every week</item>
+        <item>OTHER</item>
+    </string-array>
+
+
+
 </resources>
