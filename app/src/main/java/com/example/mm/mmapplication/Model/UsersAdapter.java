@@ -54,18 +54,30 @@ public class UsersAdapter extends BaseAdapter {
             holder=new Holder();
             holder.fullname = (TextView) view.findViewById(R.id.fullNameTV);
             holder.button= (ImageButton) view.findViewById(R.id.addRemoveBtn);
-            holder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println("Button clicked");
-                }
-            });
             view.setTag(holder);
         } else {
             holder = (Holder) view.getTag();
         }
-        UsersListItem i = (UsersListItem) getItem(position);
+        final UsersListItem i = (UsersListItem) getItem(position);
         holder.fullname.setText(i.getFullName());
+        if(!i.getFriend()){
+            holder.button.setImageResource(R.drawable.remove_friend);
+
+        }
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!i.getFriend()){
+                    System.out.println("Remove clicked"+ i.getFullName());
+
+                }
+                else {
+                System.out.println("Button clicked"+ i.getFullName());
+                }
+
+
+            }
+        });
        // holder.time.setText(i.getTime());
         return view;
     }

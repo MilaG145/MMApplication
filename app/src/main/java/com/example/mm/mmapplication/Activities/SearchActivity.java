@@ -28,7 +28,7 @@ UsersAdapter adapter;
         adapter= new UsersAdapter(SearchActivity.this);
         ArrayList<UsersListItem>lista=new ArrayList<UsersListItem>();
         lista.add(new UsersListItem(10L,"mila gurova", true));
-        lista.add(new UsersListItem(10L,"mila ", true));
+        lista.add(new UsersListItem(10L,"mila ", false));
         lista.add(new UsersListItem(10L,"test", true));
         adapter.setItems(lista);
         listView.setAdapter(adapter);
