@@ -3,6 +3,7 @@ package com.example.mm.mmapplication.Fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
+import com.example.mm.mmapplication.Model.ActivityModel;
 import com.example.mm.mmapplication.R;
 
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -34,9 +37,15 @@ public class CreateViewFragment extends Fragment {
     String activityCategory;
     String activityTime;
     Button dateBtn;
-    int year;
-    int month;
-    int day;
+    Button btnFrom;
+    Button btnTo;
+    int yearS;
+    int monthS;
+    int dayS;
+    int hourFrom;
+    int hourTo;
+    int minutesFrom;
+    int minutesTo;
     Date d;
 
 
@@ -47,7 +56,6 @@ public class CreateViewFragment extends Fragment {
         createBtn = (Button) view.findViewById(R.id.createBtn);
         dateBtn = (Button) view.findViewById(R.id.dateBn);
         titleET = (EditText) view.findViewById(R.id.titleET);
-        //System.out.println("Ulavaaaaa2");
         this.activity = getActivity();
 
         activityCategorySpinner = (Spinner) view.findViewById(R.id.activity_category_spinner);
@@ -99,8 +107,61 @@ public class CreateViewFragment extends Fragment {
             }
         });
 
+        btnFrom = (Button) view.findViewById(R.id.btnFrom);
+        btnTo = (Button) view.findViewById(R.id.btnTo);
+
+        btnFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromClicked(view);
+            }
+        });
+
+        btnTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toClicked(view);
+            }
+        });
+
+
         return view;
 
+
+    }
+
+    void fromClicked(View view) {
+        int hour = 00;
+        int minute = 00;
+        TimePickerDialog timeFrom;
+        timeFrom = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                hourFrom = selectedHour;
+                minutesFrom = selectedMinute;
+
+            }
+        }, hour, minute, true);
+        timeFrom.show();
+
+
+    }
+
+    void toClicked(View view) {
+        int hour = 00;
+        int minute = 00;
+        TimePickerDialog timeTo;
+        timeTo = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                hourTo = selectedHour;
+                //Date t = new GregorianCalendar(0,0,0,selectedHour,selectedMinute).getTime();
+                minutesTo = selectedMinute;
+
+            }
+        }, hour, minute, true);
+        timeTo.show();
 
     }
 
@@ -110,20 +171,31 @@ public class CreateViewFragment extends Fragment {
         int nDay = calendar.get(Calendar.DAY_OF_MONTH);
         int nMonth = calendar.get(Calendar.MONTH);
 
-        DatePickerDialog dialog=new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                d=new GregorianCalendar(year,month,day).getTime();
+                yearS = year;
+                monthS = month;
+                dayS = day;
+                d = new GregorianCalendar(year, month, day).getTime();
                 System.out.println(d);
 
             }
-        },nYear,nMonth,nDay);
+        }, nYear, nMonth, nDay);
         dialog.show();
     }
 
     void createClicked(View view) {
         try {
-            ((CreateListener) activity).create(titleET.getText().toString());
+            ActivityModel activityModel = new ActivityModel();
+            activityModel.setTitle(titleET.getText().toString());
+            activityModel.setActivityCategory(activityCategory);
+            activityModel.setActivityTime(activityTime);
+            activityModel.setTimeFrom(hourFrom + ":" + minutesFrom);
+            activityModel.setTimeTo(hourTo + ":" + minutesTo);
+            activityModel.setDate(yearS + "-" + monthS + "-" + dayS);
+            //Date dm=new GregorianCalendar(year,month,day,hourFrom,minutesFrom).getTime();
+            ((CreateListener) activity).create(activityModel);
         } catch (ClassCastException cce) {
 
         }
@@ -137,7 +209,7 @@ public class CreateViewFragment extends Fragment {
 
 
     public interface CreateListener {
-        public void create(String text);
+        public void create(ActivityModel text);
     }
 
 

@@ -42,7 +42,8 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    style="@android:style/Widget.DeviceDefault.AutoCompleteTextView" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -87,13 +88,14 @@
 
             <Button
                 android:id="@+id/registerBtn"
-                style="?android:textAppearanceSmall"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_register"
                 android:textStyle="bold"
-                android:linksClickable="false" />
+                android:linksClickable="false"
+                android:elevation="0dp" />
 
         </LinearLayout>
     </ScrollView>

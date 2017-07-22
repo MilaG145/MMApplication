@@ -36,6 +36,27 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|end" />
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:weightSum="2">
+
+            <Button
+                android:text="From"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnFrom"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="To"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnTo"
+                android:layout_weight="1"
+                android:layout_width="wrap_content" />
+        </LinearLayout>
+
         <Button
                 android:text="Create"
                 android:layout_width="match_parent"

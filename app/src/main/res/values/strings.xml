@@ -9,7 +9,7 @@
     <string name="prompt_password_retype">Retype password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="action_register">Register</string>
+    <string name="action_register">Dont have an account?</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -30,7 +30,7 @@
         <item>Only once</item>
         <item>Every day</item>
         <item>Every week</item>
-        <item>OTHER</item>
+        <item>Every month</item>
     </string-array>
 
 

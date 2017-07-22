@@ -6,5 +6,6 @@ package com.example.mm.mmapplication.Model.categories;
 public enum ActivityTime {
     ONLY_ONCE,
     EVERY_DAY,
-    EVERY_WEEK;
+    EVERY_WEEK,
+    EVERY_MONTH;
 }

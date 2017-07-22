@@ -16,6 +16,7 @@ import android.widget.EditText;
 import com.example.mm.mmapplication.Activities.FirstScreenActivity;
 import com.example.mm.mmapplication.Activities.HttpHandler;
 import com.example.mm.mmapplication.Activities.LoginActivity;
+import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.Model.User;
 import com.example.mm.mmapplication.R;
 
@@ -105,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
 
         } else {
-            showProgress(true);
+           showProgress(true);
             mAuthTask = new UserLoginTask(firstName.getText().toString(),lastName.getText().toString(),email.getText().toString(),pass.getText().toString());
             mAuthTask.execute((Void) null);
         }
@@ -160,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
             mEmail = email;
             mPassword = password;
             mfirstname=firstname;
-            mlastname=firstname;
+            mlastname=lastname;
         }
 
         @Override
@@ -168,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
 //            // TODO: attempt authentication against a network service.
                HttpHandler sh = new HttpHandler();
 //            //String url = "http://192.168.0.106:8080/users/login?email=mila@yahoo.com&password=pass";
-              String url = "http://192.168.0.106:8080/users/new";
+              String url = Constants.IP_Adress+"/users/new";
               String data = null;
               String jsonStr = null;
             try {

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.Model.User;
 import com.example.mm.mmapplication.R;
 
@@ -27,6 +28,7 @@ public class FirstScreenActivity extends AppCompatActivity {
     TextView textView;
     String mail;
     Intent intent;
+    User userActivity;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
@@ -56,6 +58,7 @@ public class FirstScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i =new Intent(FirstScreenActivity.this, CreateActivityActivity.class);
+                i.putExtra("USER",userActivity);
                 startActivity(i);
             }
         });
@@ -80,7 +83,7 @@ public class FirstScreenActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
-            String url = "http://192.168.0.106:8080/users/getUserByEmail";
+            String url = Constants.IP_Adress+"/users/getUserByEmail";
             String data = null;
             String jsonStr = null;
             JSONObject jsonObj = null;
@@ -98,19 +101,20 @@ public class FirstScreenActivity extends AppCompatActivity {
                 Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonObj);
                 //JSONArray jsonArray= jsonObj.getJSONArray("");
 
+                if(jsonObj!=null){
                 System.out.println(jsonObj.getInt("id"));
                 user=new User();
                 user.setId(jsonObj.getInt("id"));
                 user.setEmail(jsonObj.getString("email"));
                 user.setFirstName(jsonObj.getString("firstName"));
                 user.setLastName(jsonObj.getString("lastName"));
-
+                }
 
             } catch (Exception e) {
 
             }
 
-            return jsonStr != null;
+            return jsonObj != null;
         }
 
         @Override
@@ -118,7 +122,14 @@ public class FirstScreenActivity extends AppCompatActivity {
             if(aBoolean){
                 intent.putExtra("USER",user);
                 textView.setText("Welcome " + user.firstName+" "+user.lastName);
+                userActivity=user;
 
+            }
+            else {
+                loginPrefsEditor.clear();
+                loginPrefsEditor.commit();
+                Intent intent= new Intent(FirstScreenActivity.this,LoginActivity.class);
+                startActivity(intent);
             }
 
         }

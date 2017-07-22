@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.R;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -79,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         if(logged){
             Intent i = new Intent(LoginActivity.this,FirstScreenActivity.class);
             i.putExtra("EXTRA_MESSAGE",loginPreferences.getString("email",""));
-            System.out.println("Prenasocuva!!!!!!!!!");
             startActivity(i);
         }
 
@@ -255,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: attempt authentication against a network service.
             HttpHandler sh = new HttpHandler();
             //String url = "http://192.168.0.106:8080/users/login?email=mila@yahoo.com&password=pass";
-            String url = "http://192.168.0.106:8080/users/login";
+            String url = Constants.IP_Adress+"/users/login";
             String data = null;
             String jsonStr = null;
             try {
@@ -307,7 +307,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
 
             } else {
-
+                startActivity(intent);
                 mEmailView.setError(getString(R.string.error_invalid_email));
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
