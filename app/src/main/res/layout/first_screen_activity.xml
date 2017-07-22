@@ -38,4 +38,16 @@
         android:layout_marginLeft="54dp"
         android:layout_marginStart="54dp"
         android:id="@+id/createActivity" />
+
+    <Button
+        android:text="Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logoutBtn"
+        android:layout_alignRight="@+id/UsertextView"
+        android:layout_alignEnd="@+id/UsertextView"
+        android:layout_marginRight="57dp"
+        android:layout_marginEnd="57dp"
+        android:layout_marginTop="41dp"
+        android:id="@+id/searchBtn" />
 </RelativeLayout>

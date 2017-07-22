@@ -62,6 +62,14 @@ public class FirstScreenActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        Button search=(Button)findViewById(R.id.searchBtn);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FirstScreenActivity.this, SearchActivity.class);
+                startActivity(i);
+            }
+        });
 
         attemptTask();
     }
