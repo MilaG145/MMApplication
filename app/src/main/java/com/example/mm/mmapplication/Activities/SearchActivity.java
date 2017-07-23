@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.mm.mmapplication.Model.TinyDB;
+import com.example.mm.mmapplication.Model.User;
 import com.example.mm.mmapplication.Model.UsersAdapter;
 import com.example.mm.mmapplication.Model.UsersListItem;
 import com.example.mm.mmapplication.R;
@@ -19,17 +21,32 @@ import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
 UsersAdapter adapter;
+    TinyDB tinyDB;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
+        tinyDB=new TinyDB(getApplicationContext());
+        User user=tinyDB.getObject("user",User.class);
         ListView listView= (ListView) findViewById(R.id.searchListView);
-        adapter= new UsersAdapter(SearchActivity.this);
+        adapter= new UsersAdapter(SearchActivity.this, getApplicationContext());
         ArrayList<UsersListItem>lista=new ArrayList<UsersListItem>();
-        lista.add(new UsersListItem(10L,"mila gurova", true));
-        lista.add(new UsersListItem(10L,"mila ", false));
-        lista.add(new UsersListItem(10L,"test", true));
+        ArrayList<Object>friendsO=tinyDB.getListObject("friends",User.class);
+        ArrayList<User>friends=new ArrayList<User>();
+        ArrayList<Object> searched=tinyDB.getListObject("searched", User.class);
+        for(Object f:friendsO){
+            User u =(User)f;
+            friends.add(u);
+        }
+        for(Object s:searched){
+            User u=(User)s;
+            boolean friend=friends.contains(u);
+
+            lista.add(new UsersListItem(Long.parseLong(u.id.toString()),u.firstName+" "+u.lastName,!friend));
+        }
+
+
         adapter.setItems(lista);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

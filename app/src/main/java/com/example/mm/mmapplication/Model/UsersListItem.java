@@ -1,12 +1,13 @@
 package com.example.mm.mmapplication.Model;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Created by Win8.1 on 22.07.2017.
  */
 
-public class UsersListItem{
+public class UsersListItem implements Serializable{
 
     private Long userId;
     private String fullName;

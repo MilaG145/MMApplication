@@ -60,4 +60,23 @@ public class User implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return user.id.equals(this.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
+    }
 }
