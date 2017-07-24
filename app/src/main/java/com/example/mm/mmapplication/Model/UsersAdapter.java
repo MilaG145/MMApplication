@@ -29,6 +29,7 @@ public class UsersAdapter extends BaseAdapter {
     private ArrayList<UsersListItem> items;
     private TinyDB tinyDB;
     private Context context;
+    private View viewOnClick;
 
     public UsersAdapter(Context c, Context c1) {
         layoutInflater = LayoutInflater.from(c);
@@ -78,6 +79,7 @@ public class UsersAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 User user = tinyDB.getObject("user", User.class);
+                viewOnClick=view;
                 if (!i.getFriend()) {
                     System.out.println("Sent request from" + user.firstName + " to" + i.getFullName());
                     RemoveFriendTask removeFriendTask=new RemoveFriendTask(user,i);
@@ -141,16 +143,16 @@ public class UsersAdapter extends BaseAdapter {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                Toast.makeText(context,"Friend request to "+u2.getFullName()+" sent",Toast.LENGTH_LONG);
+                Toast.makeText(context,"Friend request to "+u2.getFullName()+" sent",Toast.LENGTH_LONG).show();
 
             } else {
-                Toast.makeText(context,"Friend request to "+u2.getFullName()+" wasn't sent",Toast.LENGTH_LONG);
+                Toast.makeText(context,"Friend request to "+u2.getFullName()+" wasn't sent",Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
         protected void onCancelled() {
-            Toast.makeText(context,"Friend request to "+u2.getFullName()+" wasn't sent",Toast.LENGTH_LONG);
+            Toast.makeText(context,"Friend request to "+u2.getFullName()+" wasn't sent",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -196,16 +198,16 @@ public class UsersAdapter extends BaseAdapter {
 
 
             if (success) {
-                Toast.makeText(context,"Friend: "+u2.getFullName()+" removed",Toast.LENGTH_LONG);
+                Toast.makeText(context,"Friend: "+u2.getFullName()+" removed",Toast.LENGTH_LONG).show();
 
             } else {
-                Toast.makeText(context,"Friend "+u2.getFullName()+" wasn't removed",Toast.LENGTH_LONG);
+                Toast.makeText(context,"Friend "+u2.getFullName()+" wasn't removed",Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
         protected void onCancelled() {
-            Toast.makeText(context,"Friend "+u2.getFullName()+" wasn't removed",Toast.LENGTH_LONG);
+            Toast.makeText(context,"Friend "+u2.getFullName()+" wasn't removed",Toast.LENGTH_LONG).show();
         }
     }
 }
