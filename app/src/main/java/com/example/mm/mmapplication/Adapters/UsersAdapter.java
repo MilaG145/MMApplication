@@ -1,4 +1,4 @@
-package com.example.mm.mmapplication.Model;
+package com.example.mm.mmapplication.Adapters;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.example.mm.mmapplication.Activities.HttpHandler;
 import com.example.mm.mmapplication.Activities.LoginActivity;
 import com.example.mm.mmapplication.Constants;
+import com.example.mm.mmapplication.Model.TinyDB;
+import com.example.mm.mmapplication.Model.User;
+import com.example.mm.mmapplication.Model.UsersListItem;
 import com.example.mm.mmapplication.R;
 
 import java.io.UnsupportedEncodingException;
@@ -29,8 +32,6 @@ public class UsersAdapter extends BaseAdapter {
     private ArrayList<UsersListItem> items;
     private TinyDB tinyDB;
     private Context context;
-    private View viewOnClick;
-
     public UsersAdapter(Context c, Context c1) {
         layoutInflater = LayoutInflater.from(c);
         context=c1;
@@ -79,7 +80,6 @@ public class UsersAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 User user = tinyDB.getObject("user", User.class);
-                viewOnClick=view;
                 if (!i.getFriend()) {
                     System.out.println("Sent request from" + user.firstName + " to" + i.getFullName());
                     RemoveFriendTask removeFriendTask=new RemoveFriendTask(user,i);

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="8"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:descendantFocusability="blocksDescendants">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNotification"
+        android:layout_weight="5"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:text="Friend request from Martin Ramov"
+        android:maxLines="2"
+        android:layout_marginLeft="5dp"
+        android:textColor="@android:color/background_dark"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/acceptnotification"
+        android:id="@+id/btnDeclineNotification"
+        android:layout_weight="1.5"
+        android:focusable="false"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="4dp" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/declinenotification"
+        android:id="@+id/btnAcceptNotification"
+        android:layout_weight="1.5"
+        android:focusable="false"
+        android:background="@android:color/transparent" />
+</LinearLayout>

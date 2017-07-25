@@ -69,6 +69,15 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
                 startActivity(i);
             }
         });
+
+        Button notif=(Button) findViewById(R.id.notifications);
+        notif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FirstScreenActivity.this, NotificationActivity.class);
+                startActivity(i);
+            }
+        });
         attemptTask();
 
 

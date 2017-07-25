@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.R;
@@ -307,10 +308,10 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
 
             } else {
-                startActivity(intent);
                 mEmailView.setError(getString(R.string.error_invalid_email));
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+                Toast.makeText(LoginActivity.this, "Check internet connection", Toast.LENGTH_LONG).show();
             }
         }
 
