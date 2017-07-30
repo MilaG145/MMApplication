@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mm.mmapplication.Constants;
+import com.example.mm.mmapplication.Fragments.NavigationFragment;
 import com.example.mm.mmapplication.Fragments.SearchFragment;
 import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.Model.User;
@@ -28,13 +30,15 @@ import java.util.ArrayList;
  * Created by Win8.1 on 16.07.2017.
  */
 
-public class FirstScreenActivity extends AppCompatActivity implements SearchFragment.CreateSearchListener {
+public class FirstScreenActivity extends AppCompatActivity implements SearchFragment.CreateSearchListener, NavigationFragment.CreateNavigationListener {
 
     TextView textView;
     String mail;
     Intent intent;
     User userActivity;
     TinyDB tinyDB;
+
+
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
@@ -45,40 +49,12 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         setContentView(R.layout.first_screen_activity);
         textView = (TextView) findViewById(R.id.UsertextView);
         intent = getIntent();
-        mail = intent.getStringExtra("EXTRA_MESSAGE");
+        mail = tinyDB.getString("email");
         //textView.setText("Welcome " + mail);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
+            attemptTask();
 
-        Button logoutBtn = (Button) findViewById(R.id.logoutBtn);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loginPrefsEditor.clear();
-                loginPrefsEditor.commit();
-                Intent intent = new Intent(FirstScreenActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-        Button createBtn = (Button) findViewById(R.id.createActivity);
-        createBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(FirstScreenActivity.this, CreateActivityActivity.class);
-                i.putExtra("USER", userActivity);
-                startActivity(i);
-            }
-        });
-
-        Button notif=(Button) findViewById(R.id.notifications);
-        notif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(FirstScreenActivity.this, NotificationActivity.class);
-                startActivity(i);
-            }
-        });
-        attemptTask();
 
 
     }
@@ -91,15 +67,60 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        NavigationFragment fragment = (NavigationFragment) getFragmentManager().findFragmentById(R.id.fraNavigation);
+        fragment.myProfileClicked(null);
+
+            attemptTask();
+
+
+
+    }
+
+    @Override
     public void createSearchListener(String text) {
         if (text.trim().isEmpty()) {
             Toast.makeText(FirstScreenActivity.this, "Please enter a name", Toast.LENGTH_LONG).show();
         } else {
-            SearchTask stask= new SearchTask(userActivity.id,text);
+            SearchTask stask = new SearchTask(userActivity.id, text);
             stask.execute((Void) null);
 
         }
     }
+
+    @Override
+    public void createMyProfileClickedListener() {
+
+    }
+
+    @Override
+    public void createNotificationsClickedListener() {
+        Intent i = new Intent(FirstScreenActivity.this, NotificationActivity.class);
+        startActivity(i);
+
+    }
+
+    @Override
+    public void createCreateClickedListener() {
+        Intent i = new Intent(FirstScreenActivity.this, CreateActivityActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void createChatClickedListener() {
+        Intent i = new Intent(FirstScreenActivity.this, ChatActivity.class);
+        startActivity(i);
+
+    }
+
+    @Override
+    public void createEditClickedListener() {
+        Intent i = new Intent(FirstScreenActivity.this, EditProfileActivity.class);
+        startActivity(i);
+    }
+
+
 
     public class GetUser extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
@@ -192,7 +213,6 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         }
     }
 
-
     public class SearchTask extends AsyncTask<Void, Void, Boolean> {
         Long userId;
         String search;
@@ -243,18 +263,17 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                if(searched.isEmpty()){
-                    Toast.makeText(FirstScreenActivity.this,"No results found",Toast.LENGTH_LONG).show();
-                }
-                else {
-                    tinyDB.putListObject("searched",searched);
+                if (searched.isEmpty()) {
+                    Toast.makeText(FirstScreenActivity.this, "No results found", Toast.LENGTH_LONG).show();
+                } else {
+                    tinyDB.putListObject("searched", searched);
                     Intent i = new Intent(FirstScreenActivity.this, SearchActivity.class);
                     startActivity(i);
 
                 }
 
             } else {
-                Toast.makeText(FirstScreenActivity.this,"Could not search at this moment",Toast.LENGTH_LONG).show();
+                Toast.makeText(FirstScreenActivity.this, "Could not search at this moment", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -262,12 +281,5 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         protected void onCancelled() {
 
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        attemptTask();
-
     }
 }

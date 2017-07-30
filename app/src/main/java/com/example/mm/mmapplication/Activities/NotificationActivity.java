@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mm.mmapplication.Adapters.NotificationsAdapter;
+import com.example.mm.mmapplication.Fragments.NavigationFragment;
 import com.example.mm.mmapplication.Model.FriendRequest;
 import com.example.mm.mmapplication.Model.Meeting;
 import com.example.mm.mmapplication.Model.NotificationModel;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * Created by Win8.1 on 25.07.2017.
  */
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity implements NavigationFragment.CreateNavigationListener {
     NotificationsAdapter notificationsAdapter;
 
     @Override
@@ -74,6 +75,33 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     public void getNotifications(){
+
+    }
+
+    @Override
+    public void createMyProfileClickedListener() {
+        Intent i = new Intent(NotificationActivity.this, CreateActivityActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void createNotificationsClickedListener() {
+
+    }
+
+    @Override
+    public void createCreateClickedListener() {
+        Intent i = new Intent(NotificationActivity.this, CreateActivityActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void createChatClickedListener() {
+
+    }
+
+    @Override
+    public void createEditClickedListener() {
 
     }
 }

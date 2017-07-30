@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mm.mmapplication.Constants;
+import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.R;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -65,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    TinyDB tinyDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
         checkBox= (CheckBox) findViewById(R.id.rememberMeCB);
+        tinyDB=new TinyDB(getApplicationContext());
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
@@ -301,6 +304,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginPrefsEditor.putBoolean("logged",true);
                     loginPrefsEditor.putString("email",mEmail);
                     loginPrefsEditor.commit();
+                    tinyDB.putString("email",mEmail);
                 }
 
                 intent.putExtra("EXTRA_MESSAGE", mEmail);
