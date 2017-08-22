@@ -33,7 +33,9 @@ public class HttpHandler {
             if (method.equals("POST")) {
                 conn.setDoOutput(true);
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write(data);
+                if(data!=null){
+                    wr.write(data);
+                }
                 wr.flush();
                 wr.close();
             }
