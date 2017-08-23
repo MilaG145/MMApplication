@@ -1,8 +1,10 @@
 package com.example.mm.mmapplication.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -37,7 +39,6 @@ public class CreateActivityActivity extends AppCompatActivity implements CreateV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_activity_activity);
-        tekst = (TextView) findViewById(R.id.tvCreate);
         tinyDB = new TinyDB(getApplicationContext());
         user = tinyDB.getObject("user", User.class);
         // setFragment(createViewFragment);

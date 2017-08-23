@@ -1,9 +1,11 @@
 package com.example.mm.mmapplication.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -64,8 +66,21 @@ public class EditProfileActivity extends AppCompatActivity  implements Navigatio
 
     @Override
     public void createCreateClickedListener() {
-        Intent i = new Intent(EditProfileActivity.this, CreateActivityActivity.class);
-        startActivity(i);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Create").setPositiveButton("Create Meeting", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(EditProfileActivity.this, MeetingActivity.class);
+                startActivity(i);
+            }
+        }).setNegativeButton("Create Activity", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(EditProfileActivity.this, CreateActivityActivity.class);
+                startActivity(i);
+            }
+        }).setIcon(R.drawable.create_pic).setMessage("What do you want to create?").setCancelable(true);
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override

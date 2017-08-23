@@ -5,5 +5,5 @@ package com.example.mm.mmapplication;
  */
 
 public class Constants {
-     public static String IP_Adress="http://192.168.1.112:8080";
+     public static String IP_Adress="http://192.168.1.101:8080";
 }

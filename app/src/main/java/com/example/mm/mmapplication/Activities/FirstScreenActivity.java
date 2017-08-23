@@ -1,9 +1,11 @@
 package com.example.mm.mmapplication.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.Fragments.NavigationFragment;
 import com.example.mm.mmapplication.Fragments.SearchFragment;
+import com.example.mm.mmapplication.Model.Meeting;
 import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.Model.User;
 import com.example.mm.mmapplication.R;
@@ -48,7 +51,7 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         tinyDB = new TinyDB(getApplicationContext());
         setContentView(R.layout.first_screen_activity);
         textView = (TextView) findViewById(R.id.UsertextView);
-        intent = getIntent();
+        //intent = getIntent();
         mail = tinyDB.getString("email");
         //textView.setText("Welcome " + mail);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -103,8 +106,22 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
 
     @Override
     public void createCreateClickedListener() {
-        Intent i = new Intent(FirstScreenActivity.this, CreateActivityActivity.class);
-        startActivity(i);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Create").setPositiveButton("Create Meeting", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(FirstScreenActivity.this, MeetingActivity.class);
+                startActivity(i);
+            }
+        }).setNegativeButton("Create Activity", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(FirstScreenActivity.this, CreateActivityActivity.class);
+                startActivity(i);
+            }
+        }).setIcon(R.drawable.create_pic).setMessage("What do you want to create?").setCancelable(true);
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -196,7 +213,7 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if (aBoolean) {
-                intent.putExtra("USER", user);
+               // intent.putExtra("USER", user);
                 textView.setText("Welcome " + user.firstName + " " + user.lastName);
                 userActivity = user;
                 tinyDB.putObject("user", userActivity);

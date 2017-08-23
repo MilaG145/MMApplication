@@ -21,7 +21,8 @@
         <Spinner
             android:id="@+id/activity_category_spinner"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:addStatesFromChildren="false" />
 
         <Button
             android:text="Date"
@@ -63,14 +64,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/createBtn" />
 
-
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="time"
-            android:ems="10"
-            android:id="@+id/editText" />
 
     </LinearLayout>
 
