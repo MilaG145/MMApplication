@@ -30,7 +30,7 @@ public class HttpHandler {
             URL url = new URL(reqUrl);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method);
-            if (method.equals("POST")) {
+            if (method.equals("POST")||method.equals("PUT")) {
                 conn.setDoOutput(true);
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
                 if(data!=null){

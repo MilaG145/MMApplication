@@ -66,10 +66,6 @@ UsersAdapter adapter;
                 else {
                     Toast.makeText(getApplicationContext(),"First add this user as a friend",Toast.LENGTH_LONG).show();
                 }
-
-
-
-
             }
         });
     }
