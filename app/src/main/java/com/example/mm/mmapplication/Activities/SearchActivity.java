@@ -60,7 +60,8 @@ UsersAdapter adapter;
                 compare.setId(Integer.parseInt(selected.getUserId().toString()));
                 if (friends.contains(compare)){
                     Intent i =new Intent(SearchActivity.this,UserFriendPreview.class);
-                    i.putExtra("userFriend",selected.getEmail());
+                    i.putExtra("userFriend",selected.getUserId().toString());
+                    i.putExtra("userFriendName", selected.getFullName());
                     startActivity(i);
                 }
                 else {

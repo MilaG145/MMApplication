@@ -251,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
             String data = null;
             String jsonStr = null;
             String jsonStr1 = null;
+            JSONObject obj=null;
             try {
                 data = URLEncoder.encode("email", "UTF-8")
                         + "=" + URLEncoder.encode(mEmail, "UTF-8");
@@ -262,12 +263,13 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
                 jsonStr = sh.makeServiceCall(url, data, "POST");
+                obj=new JSONObject(jsonStr);
                 Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonStr);
 
             } catch (Exception e) {
 
             }
-            if(jsonStr != null){
+            if(jsonStr.compareTo("false")!=1){
                 HttpHandler sh1 = new HttpHandler();
                 String url1 = Constants.IP_Adress + "/users/getUserByEmail";
                 String data1 = null;
@@ -297,7 +299,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-
             return jsonStr1 != null;
         }
 
@@ -324,6 +325,8 @@ public class LoginActivity extends AppCompatActivity {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
                 Toast.makeText(LoginActivity.this, "Check internet connection", Toast.LENGTH_LONG).show();
+//                Intent i =new Intent(LoginActivity.this,LoginActivity.class);
+//                startActivity(i);
             }
         }
 
