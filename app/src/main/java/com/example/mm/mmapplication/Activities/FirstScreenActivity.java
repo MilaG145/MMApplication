@@ -11,15 +11,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mm.mmapplication.Adapters.PreviewAdapter;
 import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.Fragments.NavigationFragment;
 import com.example.mm.mmapplication.Fragments.SearchFragment;
 import com.example.mm.mmapplication.Model.Meeting;
+import com.example.mm.mmapplication.Model.PreviewModel;
 import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.Model.User;
+import com.example.mm.mmapplication.Model.categories.PreviewCategory;
 import com.example.mm.mmapplication.R;
 
 import org.json.JSONArray;
@@ -37,10 +41,12 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
 
     TextView textView;
     String mail;
-    Intent intent;
-    User userActivity;
+    User user;
     TinyDB tinyDB;
-
+    ListView lvActivities;
+    ListView lvMeetings;
+    PreviewAdapter activitiesAdapter;
+    PreviewAdapter meetingsAdapter;
 
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -51,11 +57,15 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         tinyDB = new TinyDB(getApplicationContext());
         setContentView(R.layout.first_screen_activity);
         textView = (TextView) findViewById(R.id.UsertextView);
-        //intent = getIntent();
         mail = tinyDB.getString("email");
-        //textView.setText("Welcome " + mail);
+        user=tinyDB.getObject("user",User.class);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
+        textView.setText("Welcome " + user.firstName + " " + user.lastName);
+        lvActivities= (ListView) findViewById(R.id.lvActivities);
+        lvMeetings = (ListView) findViewById(R.id.lvMeetings);
+        activitiesAdapter= new PreviewAdapter(getApplicationContext());
+        meetingsAdapter= new PreviewAdapter(getApplicationContext());
             attemptTask();
 
 
@@ -64,7 +74,7 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
 
 
     private void attemptTask() {
-        GetUser task = new GetUser(mail);
+        GetUser task = new GetUser();
         task.execute((Void) null);
 
     }
@@ -86,7 +96,7 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
         if (text.trim().isEmpty()) {
             Toast.makeText(FirstScreenActivity.this, "Please enter a name", Toast.LENGTH_LONG).show();
         } else {
-            SearchTask stask = new SearchTask(userActivity.id, text);
+            SearchTask stask = new SearchTask(user.id, text);
             stask.execute((Void) null);
 
         }
@@ -140,58 +150,29 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
 
 
     public class GetUser extends AsyncTask<Void, Void, Boolean> {
-        private final String mEmail;
+        
         ArrayList<Object> friends = null;
-        User user = null;
+        ArrayList<PreviewModel> pmActivities=new ArrayList<PreviewModel>();
+        ArrayList<PreviewModel> pmMeetings=new ArrayList<PreviewModel>();
 
-        GetUser(String email) {
-            mEmail = email;
+        GetUser() {
+            
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
+            boolean prv= false;
+            boolean vtor=false;
+            boolean tret=false;
             HttpHandler sh = new HttpHandler();
-            String url = Constants.IP_Adress + "/users/getUserByEmail";
+            String url = Constants.IP_Adress + "/users/getFriends/" + user.id;
             String data = null;
             String jsonStr = null;
-            JSONObject jsonObj = null;
-            boolean prv = false;
-            boolean vtor = false;
-
-            try {
-                data = URLEncoder.encode("email", "UTF-8")
-                        + "=" + URLEncoder.encode(mEmail, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            try {
-                jsonStr = sh.makeServiceCall(url, data, "POST");
-
-                jsonObj = new JSONObject(jsonStr);
-                Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonObj);
-                if (jsonObj != null) {
-                    System.out.println(jsonObj.getInt("id"));
-                    user = new User();
-                    user.setId(jsonObj.getInt("id"));
-                    user.setEmail(jsonObj.getString("email"));
-                    user.setFirstName(jsonObj.getString("firstName"));
-                    user.setLastName(jsonObj.getString("lastName"));
-                    prv = true;
-                }
-
-            } catch (Exception e) {
-
-            }
-            sh = new HttpHandler();
-            url = Constants.IP_Adress + "/users/getFriends/" + user.id;
-            data = null;
-            jsonStr = null;
             try {
                 jsonStr = sh.makeServiceCall(url, data, "GET");
                 JSONArray jsonArray = new JSONArray(jsonStr);
                 friends = new ArrayList<Object>();
                 if (jsonArray != null) {
-                    vtor = true;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
                         User u = new User();
@@ -202,22 +183,147 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
                         u.setLastName(obj.getString("lastName"));
                         friends.add(u);
                     }
+                    prv=true;
                 }
 
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
-            return (vtor && prv);
+            url=Constants.IP_Adress+"/activities/all/"+user.id;
+            try{
+                jsonStr=sh.makeServiceCall(url,null,"GET");
+                JSONArray jsonArray= new JSONArray(jsonStr);
+                pmActivities= new ArrayList<>();
+                for(int i =0;i<jsonArray.length();i++){
+                    JSONObject obj=jsonArray.getJSONObject(i);
+                    PreviewModel previewModel=new PreviewModel();
+                    previewModel.setPreviewCategory(PreviewCategory.Activity);
+                    StringBuilder date= new StringBuilder();
+                    JSONObject objDate=obj.getJSONObject("date");
+                    date.append(objDate.getString("dayOfMonth"));
+                    date.append("/");
+                    date.append(objDate.getString("month"));
+                    date.append("/");
+                    date.append(objDate.getString("year"));
+                    date.append(" ");
+                    date.append("(");
+                    date.append(objDate.getString("dayOfWeek"));
+                    date.append(")");
+                    previewModel.setDate(date.toString());
+                    previewModel.setTitle(obj.getString("title"));
+                    previewModel.setId(obj.getString("id"));
+                    StringBuilder time= new StringBuilder();
+                    JSONObject objTimeF=obj.getJSONObject("timeFrom");
+                    JSONObject objTimeT=obj.getJSONObject("timeTo");
+                    String var;
+                    var= objTimeF.getString("hour");
+                    if(Integer.parseInt(var)<10){
+                        time.append("0");
+                    }
+                    time.append(var);
+                    time.append(":");
+                    var= objTimeF.getString("minute");
+                    if(Integer.parseInt(var)<10){
+                        time.append("0");
+                    }
+                    time.append(var);
+                    time.append("->");
+                    var= objTimeT.getString("hour");
+                    if(Integer.parseInt(var)<10){
+                        time.append("0");
+                    }
+                    time.append(var);
+                    time.append(":");
+                    var= objTimeT.getString("minute");
+                    if(Integer.parseInt(var)<10){
+                        time.append("0");
+                    }
+                    time.append(var);
+                    previewModel.setTime(time.toString());
+                    pmActivities.add(previewModel);
+                }
+                vtor=true;
+
+            }catch (Exception e){
+
+            }
+            url=Constants.IP_Adress+"/meetings/getMeetings/"+user.id;
+            try{
+                jsonStr=sh.makeServiceCall(url,null,"GET");
+                JSONArray jsonArray= new JSONArray(jsonStr);
+                pmMeetings= new ArrayList<>();
+                for(int i =0;i<jsonArray.length();i++){
+                    JSONObject obj=jsonArray.getJSONObject(i);
+                    PreviewModel previewModel=new PreviewModel();
+                    previewModel.setPreviewCategory(PreviewCategory.Meeting);
+                    StringBuilder date= new StringBuilder();
+                    JSONObject objDate=obj.getJSONObject("date");
+                    if(objDate!=null){
+                        date.append(objDate.getString("dayOfMonth"));
+                        date.append("/");
+                        date.append(objDate.getString("month"));
+                        date.append("/");
+                        date.append(objDate.getString("year"));
+                        date.append(" ");
+                        date.append("(");
+                        date.append(objDate.getString("dayOfWeek"));
+                        date.append(")");
+                    }
+                    previewModel.setDate(date.toString());
+                    previewModel.setTitle(obj.getString("title"));
+                    previewModel.setId(obj.getString("id"));
+                    StringBuilder time= new StringBuilder();
+                    JSONObject objTimeF=obj.getJSONObject("timeFrom");
+                    JSONObject objTimeT=obj.getJSONObject("timeTo");
+                    String var;
+                    if(objTimeF!=null && objTimeT!=null){
+                        var= objTimeF.getString("hour");
+                        if(Integer.parseInt(var)<10){
+                            time.append("0");
+                        }
+                        time.append(var);
+                        time.append(":");
+                        var= objTimeF.getString("minute");
+                        if(Integer.parseInt(var)<10){
+                            time.append("0");
+                        }
+                        time.append(var);
+                        time.append("->");
+                        var= objTimeT.getString("hour");
+                        if(Integer.parseInt(var)<10){
+                            time.append("0");
+                        }
+                        time.append(var);
+                        time.append(":");
+                        var= objTimeT.getString("minute");
+                        if(Integer.parseInt(var)<10){
+                            time.append("0");
+                        }
+                        time.append(var);
+                    }
+
+
+                    previewModel.setTime(time.toString());
+                    pmMeetings.add(previewModel);
+                }
+                tret=true;
+
+            }catch (Exception e){
+                System.out.println(e.toString());
+            }
+
+            return prv&&vtor&&tret;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if (aBoolean) {
                // intent.putExtra("USER", user);
-                textView.setText("Welcome " + user.firstName + " " + user.lastName);
-                userActivity = user;
-                tinyDB.putObject("user", userActivity);
                 tinyDB.putListObject("friends", friends);
+                activitiesAdapter.setItems(pmActivities);
+                meetingsAdapter.setItems(pmMeetings);
+                lvMeetings.setAdapter(meetingsAdapter);
+                lvActivities.setAdapter(activitiesAdapter);
 
 
             } else {

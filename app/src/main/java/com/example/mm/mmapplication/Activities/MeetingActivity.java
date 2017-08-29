@@ -77,7 +77,7 @@ public class MeetingActivity extends AppCompatActivity implements NavigationFrag
         // this.activity = getActivity();
 
         meetingCategorySpinner = (Spinner) findViewById(R.id.meetingCategorySpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getApplicationContext(),
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
                 R.array.activity_choice, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         meetingCategorySpinner.setAdapter(adapter);
@@ -348,7 +348,13 @@ public class MeetingActivity extends AppCompatActivity implements NavigationFrag
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            ///addUser/{meetingId}/{userId}",
+            url = Constants.IP_Adress + "/meetings/addUser/"+meetingId+"/"+user.id;
+            try{
+                jsonStr = sh.makeServiceCall(url, data, "PUT");
+            }catch (Exception e){
 
+            }
 
 
 

@@ -24,9 +24,12 @@ import android.widget.Toast;
 
 import com.example.mm.mmapplication.Constants;
 import com.example.mm.mmapplication.Model.TinyDB;
+import com.example.mm.mmapplication.Model.User;
 import com.example.mm.mmapplication.R;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -50,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor loginPrefsEditor;
     private GoogleApiClient client;
     TinyDB tinyDB;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,6 +250,7 @@ public class LoginActivity extends AppCompatActivity {
             String url = Constants.IP_Adress+"/users/login";
             String data = null;
             String jsonStr = null;
+            String jsonStr1 = null;
             try {
                 data = URLEncoder.encode("email", "UTF-8")
                         + "=" + URLEncoder.encode(mEmail, "UTF-8");
@@ -255,27 +260,45 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            //Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonStr);
-
             try {
                 jsonStr = sh.makeServiceCall(url, data, "POST");
-                // Simulate network access.
-//                JSONObject jsonObj = new JSONObject(jsonStr);
                 Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonStr);
-                //JSONArray jsonArray= jsonObj.getJSONArray("");
-                //Thread.sleep(2000);
 
             } catch (Exception e) {
 
             }
-//            catch (JSONException e) {
-//                e.printStackTrace();
-//
+            if(jsonStr != null){
+                HttpHandler sh1 = new HttpHandler();
+                String url1 = Constants.IP_Adress + "/users/getUserByEmail";
+                String data1 = null;
+                JSONObject jsonObj = null;
+                try {
+                    data1 = URLEncoder.encode("email", "UTF-8")
+                            + "=" + URLEncoder.encode(mEmail, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    jsonStr1 = sh1.makeServiceCall(url1, data1, "POST");
 
-            // TODO: register the new account here.
-            System.out.println(Boolean.valueOf(jsonStr));
+                    jsonObj = new JSONObject(jsonStr1);
+                    Log.i(LoginActivity.class.getSimpleName(), "Response from url: " + jsonObj);
+                    if (jsonObj != null) {
+                        System.out.println(jsonObj.getInt("id"));
+                        user = new User();
+                        user.setId(jsonObj.getInt("id"));
+                        user.setEmail(jsonObj.getString("email"));
+                        user.setFirstName(jsonObj.getString("firstName"));
+                        user.setLastName(jsonObj.getString("lastName"));
+                    }
 
-            return jsonStr != null;
+                } catch (Exception e) {
+
+                }
+
+            }
+
+            return jsonStr1 != null;
         }
 
         @Override
@@ -286,11 +309,12 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 if(checkBox.isChecked()){
                     loginPrefsEditor.putBoolean("logged",true);
-                    loginPrefsEditor.putString("email",mEmail);
-                    loginPrefsEditor.commit();
-                    tinyDB.putString("email",mEmail);
                 }
 
+                loginPrefsEditor.putString("email",mEmail);
+                loginPrefsEditor.commit();
+                tinyDB.putString("email",mEmail);
+                tinyDB.putObject("user", user);
                 intent.putExtra("EXTRA_MESSAGE", mEmail);
                 startActivity(intent);
                 finish();

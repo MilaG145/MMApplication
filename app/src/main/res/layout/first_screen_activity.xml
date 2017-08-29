@@ -16,18 +16,6 @@
         android:name="com.example.mm.mmapplication.Fragments.SearchFragment"
         android:id="@+id/fragment" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="211dp"
-        android:id="@+id/UsertextView"
-        android:layout_weight="0.29"
-        android:layout_marginLeft="72dp"
-        android:layout_marginStart="72dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,6 +24,62 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/fraNavigation" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/UsertextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:text="Your Activities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvActivities" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/UsertextView"
+        android:layout_weight="0.29"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:paddingTop="5dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_above="@+id/fraNavigation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:text="Your Meetings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvMeetings" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>
