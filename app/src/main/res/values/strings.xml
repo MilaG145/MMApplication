@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MMApplication</string>
+    <string name="app_name">Catch Up</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

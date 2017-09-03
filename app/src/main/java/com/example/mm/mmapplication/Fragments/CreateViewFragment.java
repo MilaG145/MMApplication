@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.mm.mmapplication.Model.ActivityModel;
 import com.example.mm.mmapplication.R;
@@ -193,6 +194,10 @@ public class CreateViewFragment extends Fragment {
             activityModel.setActivityTime(activityTime);
             activityModel.setTimeFrom(hourFrom + ":" + minutesFrom);
             activityModel.setTimeTo(hourTo + ":" + minutesTo);
+            if(monthS==0||dayS==0){
+                Toast.makeText(view.getContext(),"Fill in Date field", Toast.LENGTH_LONG).show();
+            }
+
             activityModel.setDate(yearS + "-" + monthS + "-" + dayS);
             //Date dm=new GregorianCalendar(year,month,day,hourFrom,minutesFrom).getTime();
             ((CreateListener) activity).create(activityModel);
