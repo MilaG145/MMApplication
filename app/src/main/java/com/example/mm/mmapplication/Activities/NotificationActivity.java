@@ -120,7 +120,6 @@ public class NotificationActivity extends AppCompatActivity implements Navigatio
                         notificationModel.setId(Long.parseLong(obj.getString("id")));
                         String category=obj.getString("category");
                         if(category.equals("FriendRequest")){
-                            System.out.println("Ulava FR");
                             notificationModel.setCategory(NotificationCategory.FriendRequest);
                             JSONObject obj2=obj.getJSONObject("friendRequest");
                             FriendRequest friendRequest= new FriendRequest();
@@ -136,15 +135,56 @@ public class NotificationActivity extends AppCompatActivity implements Navigatio
                             notificationModel.setFriendRequest(friendRequest);
                         }
                         else {
-                            System.out.println("Ulava M");
                             notificationModel.setCategory(NotificationCategory.Meeting);
                             JSONObject obj2=obj.getJSONObject("meeting");
                             Meeting meeting=new Meeting();
                             meeting.setId(Long.parseLong(obj2.getString("id")));
+                            StringBuilder date= new StringBuilder();
+                            JSONObject objDate=obj2.getJSONObject("date");
+                            if(objDate!=null){
+                                date.append(objDate.getString("dayOfMonth"));
+                                date.append("/");
+                                date.append(objDate.getString("month"));
+                                date.append("/");
+                                date.append(objDate.getString("year"));
+                                date.append(" ");
+                                date.append("(");
+                                date.append(objDate.getString("dayOfWeek"));
+                                date.append(")");
+                            }
                             meeting.setTitle(obj2.getString("title"));
-                            meeting.setDate(obj2.getString("date"));
-                            meeting.setTimeFrom(obj2.getString("timeFrom"));
-                            meeting.setTimeTo(obj2.getString("timeTo"));
+                            meeting.setDate(date.toString());
+                            StringBuilder timeF= new StringBuilder();
+                            StringBuilder timeT= new StringBuilder();
+                            JSONObject objTimeF=obj2.getJSONObject("timeFrom");
+                            JSONObject objTimeT=obj2.getJSONObject("timeTo");
+                            String var;
+                            if(objTimeF!=null && objTimeT!=null){
+                                var= objTimeF.getString("hour");
+                                if(Integer.parseInt(var)<10){
+                                    timeF.append("0");
+                                }
+                                timeF.append(var);
+                                timeF.append(":");
+                                var= objTimeF.getString("minute");
+                                if(Integer.parseInt(var)<10){
+                                    timeF.append("0");
+                                }
+                                timeF.append(var);
+                                var= objTimeT.getString("hour");
+                                if(Integer.parseInt(var)<10){
+                                    timeT.append("0");
+                                }
+                                timeT.append(var);
+                                timeT.append(":");
+                                var= objTimeT.getString("minute");
+                                if(Integer.parseInt(var)<10){
+                                    timeT.append("0");
+                                }
+                                timeT.append(var);
+                            }
+                            meeting.setTimeFrom(timeF.toString());
+                            meeting.setTimeTo(timeT.toString());
                             notificationModel.setReceiver(reciever);
                             notificationModel.setMeeting(meeting);
 

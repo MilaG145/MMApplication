@@ -34,19 +34,19 @@ public class EditProfileActivity extends AppCompatActivity implements Navigation
     User user;
     TextView tvName;
     TextView tvLastName;
-    TextView tvEmail;
+
     TextView tvPass;
     EditText etName;
     EditText etLastName;
     EditText etPass;
-    EditText etEmal;
+
     Boolean bName;
     Boolean bLastName;
-    Boolean bEmail;
+
     Boolean bPassword;
     String sName;
     String sLastName;
-    String sEmail;
+
     String sPassword;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -64,22 +64,19 @@ public class EditProfileActivity extends AppCompatActivity implements Navigation
 
         tvName = (TextView) findViewById(R.id.tvName);
         tvLastName = (TextView) findViewById(R.id.tvlastName);
-        tvEmail = (TextView) findViewById(R.id.tvEmail);
         tvPass = (TextView) findViewById(R.id.tvPassword);
 
         etName = (EditText) findViewById(R.id.etName);
         etLastName = (EditText) findViewById(R.id.etLastName);
         etPass = (EditText) findViewById(R.id.etPass);
-        etEmal = (EditText) findViewById(R.id.etEmail);
+
 
         tvName.setText(user.getFirstName());
         tvLastName.setText(user.getLastName());
-        tvEmail.setText(user.getEmail());
         tvPass.setText(user.getPassword());
 
         bName = false;
         bLastName = false;
-        bEmail = false;
         bPassword = false;
 
         Button save = (Button) findViewById(R.id.btnSave);
@@ -108,10 +105,6 @@ public class EditProfileActivity extends AppCompatActivity implements Navigation
                     sLastName = etLastName.getText().toString();
                 }
 
-                if (!etEmal.getText().toString().trim().isEmpty()) {
-                    bEmail = true;
-                    sEmail = etEmal.getText().toString();
-                }
                 if (!etPass.getText().toString().trim().isEmpty()) {
                     bPassword = true;
                     sPassword = etPass.getText().toString();
@@ -225,25 +218,7 @@ public class EditProfileActivity extends AppCompatActivity implements Navigation
                     newUser.setLastName(sLastName);
             }
 
-            if (bEmail) {
-                String url = Constants.IP_Adress + "/users/updateEmail/" + user.getId();
-                String data = null;
-                String jsonStr = null;
-                try {
-                    data = URLEncoder.encode("email", "UTF-8")
-                            + "=" + URLEncoder.encode(sEmail, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jsonStr = sh.makeServiceCall(url, data, "PUT");
-                } catch (Exception e) {
-                    return false;
-                }
-                if (jsonStr != null)
-                    newUser.setEmail(sEmail);
-            }
+
             if (bPassword) {
                 String url = Constants.IP_Adress + "/users/updatePassword/" + user.getId();
                 String data = null;

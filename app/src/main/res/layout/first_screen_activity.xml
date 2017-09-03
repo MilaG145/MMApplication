@@ -45,7 +45,9 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/lvActivities" />
+            android:id="@+id/lvActivities"
+            android:focusable="true"
+            android:clickable="true"/>
     </LinearLayout>
 
     <TextView
@@ -80,6 +82,8 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="true"
+            android:clickable="true"
             android:id="@+id/lvMeetings" />
 
     </LinearLayout>

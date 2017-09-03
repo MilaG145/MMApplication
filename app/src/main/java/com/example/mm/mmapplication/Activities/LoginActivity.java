@@ -111,7 +111,10 @@ public class LoginActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
     public void register(View view){
         Intent i =new Intent(this,RegisterActivity.class);
         startActivity(i);
@@ -244,9 +247,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             HttpHandler sh = new HttpHandler();
-            //String url = "http://192.168.0.106:8080/users/login?email=mila@yahoo.com&password=pass";
             String url = Constants.IP_Adress+"/users/login";
             String data = null;
             String jsonStr = null;
@@ -325,8 +326,6 @@ public class LoginActivity extends AppCompatActivity {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
                 Toast.makeText(LoginActivity.this, "Check internet connection", Toast.LENGTH_LONG).show();
-//                Intent i =new Intent(LoginActivity.this,LoginActivity.class);
-//                startActivity(i);
             }
         }
 

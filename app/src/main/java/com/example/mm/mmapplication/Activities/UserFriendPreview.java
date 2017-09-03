@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import com.example.mm.mmapplication.Fragments.SearchFragment;
 import com.example.mm.mmapplication.Model.PreviewModel;
 import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.Model.User;
+import com.example.mm.mmapplication.Model.categories.ActivityCategory;
 import com.example.mm.mmapplication.Model.categories.PreviewCategory;
 import com.example.mm.mmapplication.R;
 
@@ -184,6 +187,15 @@ public class UserFriendPreview extends AppCompatActivity implements SearchFragme
                         previewModel.setDate(date.toString());
                         previewModel.setTitle(obj.getString("title"));
                         previewModel.setId(obj.getString("id"));
+                        String category=obj.getString("activityCategory");
+                        if(ActivityCategory.SPORT.toString().equalsIgnoreCase(category))
+                            previewModel.setActivityCategory(ActivityCategory.SPORT);
+                        else if(ActivityCategory.WORK.toString().equalsIgnoreCase(category))
+                            previewModel.setActivityCategory(ActivityCategory.WORK);
+                        else if(ActivityCategory.SCHOOL.toString().equalsIgnoreCase(category))
+                            previewModel.setActivityCategory(ActivityCategory.SCHOOL);
+                        else
+                            previewModel.setActivityCategory(ActivityCategory.OTHER);
                         StringBuilder time= new StringBuilder();
                         JSONObject objTimeF=obj.getJSONObject("timeFrom");
                         JSONObject objTimeT=obj.getJSONObject("timeTo");
@@ -243,6 +255,22 @@ public class UserFriendPreview extends AppCompatActivity implements SearchFragme
                 if(tret){
                     meetingsAdapter.setItems(pmMeetings);
                     lvMeetings.setAdapter(meetingsAdapter);
+                    lvMeetings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View view,
+                                                int position, long id) {
+
+                            System.out.println("Ulava");
+                            PreviewModel selected= (PreviewModel) lvMeetings.getItemAtPosition(position);
+                            Intent i =new Intent(UserFriendPreview.this,MeetingPreviewActivity.class);
+                            i.putExtra("meetingid",selected.getId());
+                            i.putExtra("meetingTitle",selected.getTitle());
+                            i.putExtra("timeFrom",selected.getTime());
+                            i.putExtra("date",selected.getDate());
+                            i.putExtra("category",selected.getActivityCategory().toString());
+
+                            startActivity(i);
+                        }
+                    });
                 }else {
                     meetings.setText(name+" Has no Meetings");
                 }

@@ -208,7 +208,7 @@ public class MeetingActivity extends AppCompatActivity implements NavigationFrag
     }
 
     void createClicked(View view) {
-        if (stringdateFrom != null && stringtimeTo != null && stringtimeFrom != null && titleET != null && meetingCategory != null && selected.size() != 0) {
+        if (stringdateFrom != null && stringtimeTo != null && stringtimeFrom != null && titleET.getText().length() !=0 && meetingCategory != null && selected.size() != 0) {
             if (mAuthTask != null) {
                 return;
             } else {

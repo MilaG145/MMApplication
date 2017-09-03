@@ -17,6 +17,7 @@ import com.example.mm.mmapplication.Activities.FirstScreenActivity;
 import com.example.mm.mmapplication.Activities.HttpHandler;
 import com.example.mm.mmapplication.Activities.LoginActivity;
 import com.example.mm.mmapplication.Constants;
+import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.Model.User;
 import com.example.mm.mmapplication.R;
 
@@ -41,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private View mRegisterFormView;
     private Intent intent;
     User user;
+    TinyDB tinyDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.regEmail);
         pass = (EditText) findViewById(R.id.RegPassword);
         repass = (EditText) findViewById(R.id.ReRegPassword);
+        tinyDB=new TinyDB(getApplicationContext());
 
 
         Button register = (Button) findViewById(R.id.RegisterBtn);
@@ -221,6 +224,8 @@ public class RegisterActivity extends AppCompatActivity {
             if (success) {
 
                 intent.putExtra("EXTRA_MESSAGE", mEmail);
+                tinyDB.putString("email",mEmail);
+                tinyDB.putObject("user",user);
                 startActivity(intent);
                 finish();
 

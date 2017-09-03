@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.mm.mmapplication.Adapters.ChatAdapter;
 import com.example.mm.mmapplication.Fragments.NavigationFragment;
 import com.example.mm.mmapplication.R;
 
@@ -16,6 +17,7 @@ import com.example.mm.mmapplication.R;
 
 public class ChatActivity extends AppCompatActivity implements NavigationFragment.CreateNavigationListener{
 
+    ChatAdapter chatAdapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

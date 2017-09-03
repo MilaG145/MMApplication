@@ -1,10 +1,8 @@
 package com.example.mm.mmapplication.Activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -50,8 +48,12 @@ public class CreateActivityActivity extends AppCompatActivity implements CreateV
         if (mAuthTask != null) {
             return;
         }
-        mAuthTask = new CreateActivityTask(activityModel);
-        mAuthTask.execute((Void) null);
+        if (activityModel.getTitle().length() != 0 && activityModel.getDate().length() != 0 && activityModel.getActivityCategory() != null && activityModel.getActivityTime() != null && activityModel.getTimeFrom().length() != 0 && activityModel.getTimeTo().length() != 0) {
+            mAuthTask = new CreateActivityTask(activityModel);
+            mAuthTask.execute((Void) null);
+        }
+        else
+            Toast.makeText(getApplicationContext(), "Fill in all the fields", Toast.LENGTH_LONG).show();
     }
 
     @Override

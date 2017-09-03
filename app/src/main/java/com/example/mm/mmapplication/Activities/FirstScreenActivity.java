@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -23,6 +24,8 @@ import com.example.mm.mmapplication.Model.Meeting;
 import com.example.mm.mmapplication.Model.PreviewModel;
 import com.example.mm.mmapplication.Model.TinyDB;
 import com.example.mm.mmapplication.Model.User;
+import com.example.mm.mmapplication.Model.UsersListItem;
+import com.example.mm.mmapplication.Model.categories.ActivityCategory;
 import com.example.mm.mmapplication.Model.categories.PreviewCategory;
 import com.example.mm.mmapplication.R;
 
@@ -72,6 +75,10 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
 
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     private void attemptTask() {
         GetUser task = new GetUser();
@@ -150,13 +157,13 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
 
 
     public class GetUser extends AsyncTask<Void, Void, Boolean> {
-        
+
         ArrayList<Object> friends = null;
         ArrayList<PreviewModel> pmActivities=new ArrayList<PreviewModel>();
         ArrayList<PreviewModel> pmMeetings=new ArrayList<PreviewModel>();
 
         GetUser() {
-            
+
         }
 
         @Override
@@ -272,6 +279,15 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
                     previewModel.setDate(date.toString());
                     previewModel.setTitle(obj.getString("title"));
                     previewModel.setId(obj.getString("id"));
+                    String category=obj.getString("activityCategory");
+                    if(ActivityCategory.SPORT.toString().equalsIgnoreCase(category))
+                        previewModel.setActivityCategory(ActivityCategory.SPORT);
+                    else if(ActivityCategory.WORK.toString().equalsIgnoreCase(category))
+                        previewModel.setActivityCategory(ActivityCategory.WORK);
+                    else if(ActivityCategory.SCHOOL.toString().equalsIgnoreCase(category))
+                        previewModel.setActivityCategory(ActivityCategory.SCHOOL);
+                    else
+                        previewModel.setActivityCategory(ActivityCategory.OTHER);
                     StringBuilder time= new StringBuilder();
                     JSONObject objTimeF=obj.getJSONObject("timeFrom");
                     JSONObject objTimeT=obj.getJSONObject("timeTo");
@@ -326,6 +342,23 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
                 lvActivities.setAdapter(activitiesAdapter);
 
 
+                lvMeetings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+
+                        PreviewModel selected= (PreviewModel) lvMeetings.getItemAtPosition(position);
+                        Intent i =new Intent(FirstScreenActivity.this,MeetingPreviewActivity.class);
+                        i.putExtra("meetingid",selected.getId());
+                        i.putExtra("meetingTitle",selected.getTitle());
+                        i.putExtra("timeFrom",selected.getTime());
+                        i.putExtra("date",selected.getDate());
+                        i.putExtra("category",selected.getActivityCategory().toString());
+
+                        startActivity(i);
+                    }
+                });
+
+
             } else {
                 tinyDB.clear();
                 loginPrefsEditor.clear();
@@ -369,7 +402,6 @@ public class FirstScreenActivity extends AppCompatActivity implements SearchFrag
                     User u = new User();
                     u = new User();
                     u.setId(obj.getInt("id"));
-                    System.out.println("Iterira");
                     u.setEmail(obj.getString("email"));
                     u.setFirstName(obj.getString("firstName"));
                     u.setLastName(obj.getString("lastName"));

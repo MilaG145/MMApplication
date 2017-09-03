@@ -134,7 +134,7 @@
         android:layout_alignParentStart="true" />
 
         <Button
-            android:text="@string/action_register"
+            android:text="Register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/RegisterBtn"

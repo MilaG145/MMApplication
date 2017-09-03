@@ -36,7 +36,9 @@
             android:id="@+id/meetingCategorySpinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:addStatesFromChildren="false"  />
+            android:addStatesFromChildren="false"
+            android:textColor="@android:color/background_dark"
+            />
 
         <Button
             android:text="Date"
